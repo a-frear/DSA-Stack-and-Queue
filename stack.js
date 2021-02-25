@@ -27,8 +27,16 @@ class Stack {
     /* In order to remove the top of the stack, you have to point
     the pointer to the next item and that next item becomes the
     top of the stack */
+    // const node = this.top;
+    // this.top = node.next;
+    // return node.data;
+    /* BUT WHAT IF THERE IS NO NEXT ITEM?*/
         const node = this.top
-        this.top = node.next
+        if (node.next) { 
+            this.top = node.next
+        } else {
+            this.top = null
+        }
         return node.data
     }
 }
@@ -45,14 +53,14 @@ function main(){
 
 const starTrek = main()
 
-console.log(starTrek)
+console.log('1. look at list: ' + starTrek)
 
 const peek = stack => {
     if(stack.top === null){return null}
     return stack.top.data
 }
 
-console.log('peek at top: ' + peek(starTrek))
+console.log('2. peek at top: ' + peek(starTrek))
 
 const isEmpty = stack => {
     if (stack.top === null) {
@@ -61,7 +69,7 @@ const isEmpty = stack => {
     return false
 }
 
-console.log('Stack empty?: ' + isEmpty(starTrek))
+console.log('3. Stack empty?: ' + isEmpty(starTrek))
 
 const display = (stack) => {
     if (!stack.top) {
@@ -70,7 +78,7 @@ const display = (stack) => {
     }
     let current = stack.top;
     while (current !== null) {
-        console.log(current.data);
+        console.log('display ' + current.data);
         current = current.next;
     }
     return;
@@ -141,3 +149,33 @@ Write a program to sort a stack such that the smallest items
 are on the top (in ascending order). You can use an additional stack, 
 but you may not use any other data structure (such as an array, or linked list).
 */
+
+const sortStack = (stack) => {
+    sorted = new Stack();
+    while (!isEmpty(stack)) {
+      tmp = stack.pop();  
+      while (tmp !== null){
+      if (tmp >= peek(stack)) {
+        sorted.push(tmp);
+        tmp = stack.pop();
+      } else {
+      stack.push(sorted.pop())
+      }
+      sorted.push(tmp)
+    }}
+    return sorted;
+}
+
+  function num() {
+    const numStack = new Stack()
+    numStack.push(5)
+    numStack.push(21)
+    numStack.push(4)
+    numStack.push(1)
+
+    return numStack
+}
+
+const numStack = num()
+
+console.log(sortStack(numStack))
