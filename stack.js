@@ -200,14 +200,6 @@ Write a program to sort a stack such that the smallest items
 are on the top (in ascending order). You can use an additional stack, 
 but you may not use any other data structure (such as an array, or linked list).
 */
-
-    /*
-    Take old stack
-    temp becomes pop top of old stack
-    if temp is greater than new top of old stack, push temp to new stack, new top becomes temp
-    if not, push top of old stack to new stack
-    When old stack is empty, push temp to old stack and then push all of new stack back to old stack
-    */
    const sortStack = (stack) => {
     //create a temporary stack
     let tempStack = new Stack();
