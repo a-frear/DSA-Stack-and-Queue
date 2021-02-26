@@ -32,6 +32,9 @@ class Stack {
     // return node.data;
     /* BUT WHAT IF THERE IS NO NEXT ITEM?*/
         const node = this.top
+        if (node === null) {
+            return node
+        }
         if (node.next) { 
             this.top = node.next
         } else {
@@ -143,6 +146,54 @@ Also recognize 2 types of quote character:
 - in fact, nothing is counted until you reach the corresponding close quote.
 */
 
+// const parenthesesMatcher = function(s) {
+//     let h = new Map()
+//     h.set( ')', '(')
+//     h.set( ']', '[')
+//     h.set( '}', '{')
+    
+//     let stack = []
+//     for(let ch of s){
+//         if( '}])'.includes(ch)){
+//             if(stack.pop() !== h.get(ch))
+//                 return false
+//             continue
+//         }
+//         stack.push(ch)
+//     }
+//     return true
+// };
+
+// console.log('parentheses problem: ' + parenthesesMatcher('{()}'))
+
+
+var parenthesesMatcher = function(s) {
+    s = s.replace(/[^{}()\[\]]/g, "");
+    console.log(s)
+    const map = {
+        "}": "{",
+        ")": "(",
+        "]": "[",
+        };
+    const stack = [];
+    //push all of the parentheses that aren't a property (opening) to new stack
+    for(let ch of s){
+        // Check for opening parenthesis. map[ch] is undefined for closing parenthesis so push opening parenthesis to stack.
+        if(!map[ch]){
+            stack.push(ch);
+        }
+		// For occurance of closing parenthesis, check if its equal to similar opening parenthesis. 
+        else if (map[ch] !== stack.pop()){
+            return false;
+        }
+    }
+    return true
+};
+
+console.log('Parentheses problem: ' + parenthesesMatcher('{[asd](?)asdf[+_]()f}'))
+
+
+
 /*
 5. Sort stack
 Write a program to sort a stack such that the smallest items 
@@ -150,32 +201,53 @@ are on the top (in ascending order). You can use an additional stack,
 but you may not use any other data structure (such as an array, or linked list).
 */
 
-const sortStack = (stack) => {
-    sorted = new Stack();
-    while (!isEmpty(stack)) {
-      tmp = stack.pop();  
-      while (tmp !== null){
-      if (tmp >= peek(stack)) {
-        sorted.push(tmp);
-        tmp = stack.pop();
-      } else {
-      stack.push(sorted.pop())
-      }
-      sorted.push(tmp)
-    }}
-    return sorted;
-}
+    /*
+    Take old stack
+    temp becomes pop top of old stack
+    if temp is greater than new top of old stack, push temp to new stack, new top becomes temp
+    if not, push top of old stack to new stack
+    When old stack is empty, push temp to old stack and then push all of new stack back to old stack
+    */
+   const sortStack = (stack) => {
+    //create a temporary stack
+    let tempStack = new Stack();
+     
+     //loop while stack is not empty
+     while(!isEmpty(stack)){ 
+       
+       // pop out the first element 
+       let tmp = stack.pop(); 
+            
+       // while temporary stack is not empty and 
+       // top of stack is less than temp 
+       while(!isEmpty(tempStack) && peek(tempStack) < tmp){ 
+          // pop from temporary stack and  
+          // push it to the input stack 
+          // are you smaller than me? go back. go back. okay, i can go now.
+          stack.push(tempStack.pop()); 
+       }          
+     // push temp in tempory stack 
+     tempStack.push(tmp); 
+    } 
+    
+    return tempStack; 
+  }
 
   function num() {
     const numStack = new Stack()
     numStack.push(5)
     numStack.push(21)
-    numStack.push(4)
     numStack.push(1)
+    numStack.push(4)
+    numStack.push(2)
+    numStack.push(11)
 
     return numStack
 }
 
 const numStack = num()
 
-console.log(sortStack(numStack))
+let sorted = sortStack(numStack);
+while(!isEmpty(sorted)){
+  console.log(sorted.pop());
+}
